@@ -1,0 +1,34 @@
+Empresa
+-actualizar dispo.
+-actualizar marcas.
+-actualizar tipus format.
+-actualizar grups.
+
+-poder borrar contenido, marcas, lista al clicar en ellas (drag and drop.)
+-poner ver videowall, en programacion.
+-mirar totes les deleterow en mostrar.
+-visualizar videowall, arreglar marcas,  ponerlas en el ojo.
+-programacion actia i lista activa.
+-mirar todos los sessions que se borren quando no hacen falta.
+-revisar activa videowall actualizar.
+-en mostrar programacio, distinga entre historico (todas las listas puestas en alguna programacion), actual, toda las listas actuales.
+-ojo llistes reproduccio.
+-al activar una programacion en un videowall que se desective la anterior(preguntar correo).
+
+-cambiar menu, hacerlo lateral.
+-cambiar ordenacion base de datos, hacer con server..
+-modificar taula llistes per llistescontingut.
+-poder actualitzar contingut taules.
+-Quant cliquem per ordenar un registre que surti una fecha cap amunt o una cap aball per indicar en quin ordre va.
+-pagina inserts no fa falta de cada un, mirar de fer varaies taules a la vega per exemple en llistes programacio insertar/crear nous continguts.
+fer filtres.
+-solo actualizar
+-fer paginacions, poder seleccionar el maxim y el minim que vulguem.
+-sessiones usuario
+-registre de modificaciones de cada usuari.
+
+PREGUNTAS
+
+
+
+ESTUDIO PENDIENTE
