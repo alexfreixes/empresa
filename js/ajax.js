@@ -407,7 +407,38 @@ function actualizarDispositiu(id) {
         + pClient.value + '&IPActualizarDispositius=' + IP.value);
 }
 // FI Dispositius
-// Actualizar Programacion
+// Actualitzar Marcas
+function actualizarMarcas(id) {
+    var input = document.getElementById('inputUpdateModal' + id);
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', './main/actualizar.php', true);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.send('actualitzar=marcas&value=' + input.value + '&id=' + id);
+    setTimeout(() => {
+        mostrarTaula('marcas');
+    }, 300);
+}
+function actualizartFormat(id) {
+    var input = document.getElementById('inputUpdatetFormat' + id);
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', './main/actualizar.php', true);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.send('actualitzar=tFormat&value=' + input.value + '&id=' + id);
+    setTimeout(() => {
+        mostrarTaula('tFormat');
+    }, 300);
+}
+function actualizargrup(id) {
+    var input = document.getElementById('inputUpdategrups' + id);
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', './main/actualizar.php', true);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.send('actualitzar=grups&value=' + input.value + '&id=' + id);
+    setTimeout(() => {
+        mostrarTaula('grups');
+    }, 300);
+}
+// Actualizar
 function actualizar(id, name) {
     var mostrar = document.getElementById('mostrarIndex');
     var xhr = new XMLHttpRequest();

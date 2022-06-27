@@ -454,7 +454,43 @@ function actualizarDispositiu(id: any) {
 }
 // FI Dispositius
 
-// Actualizar Programacion
+// Actualitzar Marcas
+function actualizarMarcas(id: any) {
+    var input: any = document.getElementById('inputUpdateModal' + id);
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', './main/actualizar.php', true);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.send('actualitzar=marcas&value=' + input.value + '&id=' + id);
+    setTimeout(() => {
+        mostrarTaula('marcas');
+    }, 300);
+
+}
+function actualizartFormat(id: any) {
+    var input: any = document.getElementById('inputUpdatetFormat' + id);
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', './main/actualizar.php', true);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.send('actualitzar=tFormat&value=' + input.value + '&id=' + id);
+    setTimeout(() => {
+        mostrarTaula('tFormat');
+    }, 300);
+
+}
+function actualizargrup(id: any) {
+    var input: any = document.getElementById('inputUpdategrups' + id);
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', './main/actualizar.php', true);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.send('actualitzar=grups&value=' + input.value + '&id=' + id);
+    setTimeout(() => {
+        mostrarTaula('grups');
+    }, 300);
+
+}
+
+
+// Actualizar
 function actualizar(id: any, name: string) {
     var mostrar: any = document.getElementById('mostrarIndex');
     var xhr = new XMLHttpRequest();
@@ -467,7 +503,7 @@ function actualizar(id: any, name: string) {
 }
 
 // Borrar Dades de les Taules
-function deleteRow(id: number, tabla: string, campo: string, mostrarTabla: string) {
+function deleteRow(id: string, tabla: string, campo: string, mostrarTabla: string) {
     var text = "Eliminar aquest registre?";
     if (confirm(text) == true) {
         var xhr = new XMLHttpRequest();
@@ -477,7 +513,6 @@ function deleteRow(id: number, tabla: string, campo: string, mostrarTabla: strin
             setTimeout(() => {
                 mostrarTaula(mostrarTabla);
             }, 200);
-
         };
         xhr.send('idDelete=' + id + '&tabla=' + tabla + '&campo=' + campo);
     }

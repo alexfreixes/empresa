@@ -32,8 +32,10 @@ if (isset($_POST['taulaMostrar'])) {
                         <th class="text-center ordenarTabla" onclick="ordenar('Programacions','gru.descripcio','mostrarProgramacionsOrdenades',0)">Grup</th>
                         <th class="text-center ordenarTabla" onclick="ordenar('Programacions','pro.descripcio','mostrarProgramacionsOrdenades',1)">Videowall</th>
                         <th class="text-center ordenarTabla" onclick="ordenar('Programacions','pro.descripcio','mostrarProgramacionsOrdenades',2)">Nom</th>
-                        <th class="text-center ordenarTabla" onclick="ordenar('Programacions','tc.descripcio','mostrarProgramacionsOrdenades',3)">TipusContingut</th>
-                        <th class="text-center ordenarTabla" onclick="ordenar('Programacions','llis.descripcio','mostrarProgramacionsOrdenades',4)">Llista Reproduccio</th>
+                        <th class="text-center ordenarTabla" onclick="ordenar('Programacions','tc.descripcio','mostrarProgramacionsOrdenades',3)">TipusContingut
+                        </th>
+                        <th class="text-center ordenarTabla" onclick="ordenar('Programacions','llis.descripcio','mostrarProgramacionsOrdenades',4)">Llista
+                            Reproduccio</th>
                         <th class="text-center ordenarTabla" onclick="ordenar('Programacions','llispro.dataInici','mostrarProgramacionsOrdenades',5)">Inici</th>
                         <th class="text-center ordenarTabla" onclick="ordenar('Programacions','llispro.dataFinal','mostrarProgramacionsOrdenades',6)">Final</th>
                         <th class="text-center"></th>
@@ -49,25 +51,33 @@ if (isset($_POST['taulaMostrar'])) {
                     <tbody id="mostrarProgramacionsOrdenades">
                         <?php
                         $sql = "SELECT gru.descripcio as 'grups', 
-                                       pro.id as 'id', 
-                                       pro.descripcio as 'nom',
-                                       tc.descripcio as 'tContingut',
-                                       llis.descripcio as 'nomLlista', 
-                                       llispro.dataInici as 'dataInici', 
-                                       llispro.dataFinal as 'datafinal',
-                                       vi.descripcio as 'videowall',
-                                       vipro.activa as 'activa',
-                                       llispro.activa as 'activa2'                                     
-                                FROM `Programacions` pro 
-                                    LEFT JOIN VideowallProgramacio vipro ON pro.id = vipro.idProgramacio 
-                                    LEFT JOIN Videowall vi ON vipro.NSVW = vi.NSVW 
-                                    LEFT JOIN Grups gru ON vi.idGrup = gru.id
-                                    LEFT JOIN LlistesProgramacions llispro ON pro.id = llispro.idProgramacio 
-                                    LEFT JOIN LlistaRepr llis ON llispro.idLlistes = llis.id
-                                    LEFT JOIN TipusContingut tc ON pro.idTipusContingut = tc.id";
+                        pro.id as 'id', 
+                        pro.descripcio as 'nom',
+                        tc.descripcio as 'tContingut',
+                        llis.descripcio as 'nomLlista', 
+                        llispro.dataInici as 'dataInici', 
+                        llispro.dataFinal as 'datafinal',
+                        vi.descripcio as 'videowall',
+                        vipro.activa as 'activa',
+                        llispro.activa as 'activa2'                                     
+                 FROM `Programacions` pro 
+                     LEFT JOIN VideowallProgramacio vipro ON pro.id = vipro.idProgramacio 
+                     LEFT JOIN Videowall vi ON vipro.NSVW = vi.NSVW 
+                     LEFT JOIN Grups gru ON vi.idGrup = gru.id
+                     LEFT JOIN LlistesProgramacions llispro ON pro.id = llispro.idProgramacio 
+                     LEFT JOIN LlistaRepr llis ON llispro.idLlistes = llis.id
+                     LEFT JOIN TipusContingut tc ON pro.idTipusContingut = tc.id ORDER BY pro.id desc";
                         $execute = mysqli_query($conn, $sql);
+                        $array = array();
                         while ($row = mysqli_fetch_array($execute)) {
-                            if ($row['activa'] == 1 && $row['activa2'] == 1) {
+                            $contador = true;
+                            for ($i = 0; $i < count($array); $i++) {
+                                if ($array[$i] == $row['id']) {
+                                    $contador = false;
+                                }
+                            }
+                            if ($contador) {
+                                $array[] = $row['id'];
                         ?>
                                 <tr>
                                     <td class="text-center"><?php echo $row['grups']; ?></td>
@@ -77,8 +87,8 @@ if (isset($_POST['taulaMostrar'])) {
                                     <td class="text-center"><?php echo $row['nomLlista']; ?></td>
                                     <td class="text-center"><?php echo $row['dataInici']; ?></td>
                                     <td class="text-center"><?php echo $row['datafinal']; ?></td>
-                                    <td class="text-center"><img class="logoTabla" src="./img/logo_update.png" onclick="actualizar(<?php echo $row['id']; ?>,'Programacions')"></td>
-                                    <td class="text-center"><img class="logoTabla" src="./img/logo_delete.png" onclick="deleteRow(<?php echo $row['id']; ?>,'Programacio','id','programacio')"></td>
+                                    <td class="text-center"><img class="logoTabla" src="./img/logo_update.png" onclick="actualizar(<?php echo $row['id']; ?>,'programacions')"></td>
+                                    <td class="text-center"><img class="logoTabla" src="./img/logo_delete.png" onclick="deleteRow('<?php echo $row['id']; ?>','programacions','id','programacio')"></td>
                                 </tr>
                         <?php
                             }
@@ -114,16 +124,16 @@ if (isset($_POST['taulaMostrar'])) {
                     $cont++;
                 }
             }
-        }
-        $cont = 0;
-        foreach ($arrayContingutNumber as $keys) {
-            foreach ($keys as $key => $value) {
+            $cont = 0;
+            foreach ($arrayContingutNumber as $keys) {
+                foreach ($keys as $key => $value) {
 
-                $sqlContingutString = "SELECT * FROM `Contingut` WHERE `id` = $value";
-                $execute = mysqli_fetch_assoc(mysqli_query($conn, $sqlContingutString));
-                $arrayContingutString[$arrayIndex[$cont]][$key] = $execute['descripcio'];
+                    $sqlContingutString = "SELECT * FROM `Contingut` WHERE `id` = $value";
+                    $execute = mysqli_fetch_assoc(mysqli_query($conn, $sqlContingutString));
+                    $arrayContingutString[$arrayIndex[$cont]][$key] = $execute['descripcio'];
+                }
+                $cont++;
             }
-            $cont++;
         }
     ?>
         <div class="container text-center marginTaula esconderTablas" id="mostrarLListes">
@@ -187,7 +197,7 @@ if (isset($_POST['taulaMostrar'])) {
                                     <img class="logoTabla vhcenter" src="./img/logo_eye.png" />
                                 </button></td>
                             <td class="text-center"><img class="logoTabla" src="./img/logo_update.png" onclick="actualizar(<?php echo $row['id']; ?>,'LlistaRepr')"></td>
-                            <td class="text-center"><img class="logoTabla" src="./img/logo_delete.png" onclick="deleteRow(<?php echo $row['id']; ?>,'LlistaRepr','id','llistes')"></td>
+                            <td class="text-center"><img class="logoTabla" src="./img/logo_delete.png" onclick="deleteRow('<?php echo $row['id']; ?>','llistarepr','id','llistes')""></td>
                         </tr>
                     <?php
                     }
@@ -199,56 +209,56 @@ if (isset($_POST['taulaMostrar'])) {
     <?php
     } elseif ($_POST['taulaMostrar'] == 'videowall') {
     ?>
-        <div class="container text-center marginTaula esconderTablas" id="mostrarVideowalls">
-            <table class="table table-striped" id="tablaVideoWalls">
-                <thead>
-                    <tr>
-                        <th class="text-center ordenarTabla" onclick="ordenar('Videowall','vi.NSVW','mostrarVideowallsOrdenat',0)">NSVW</th>
-                        <th class="text-center ordenarTabla" onclick="ordenar('Videowall','vi.descripcio','mostrarVideowallsOrdenat',1)">Nom</th>
-                        <th class="text-center ordenarTabla" onclick="ordenar('Videowall','contrac.descripcio','mostrarVideowallsOrdenat',2)">Contracte</th>
-                        <th class="text-center ordenarTabla" onclick="ordenar('Videowall','cli.nomFiscal','mostrarVideowallsOrdenat',3)">Client</th>
-                        <th class="text-center ordenarTabla" onclick="ordenar('Videowall','gru.descripcio','mostrarVideowallsOrdenat',4)">Grup</th>
-                        <th class="text-center ordenarTabla" onclick="ordenar('Videowall','tf.descripcio','mostrarVideowallsOrdenat',5)">Format</th>
-                        <th class="text-center"></th>
-                        <th class="text-center"></th>
-                    </tr>
+        <div class=" container text-center marginTaula esconderTablas" id="mostrarVideowalls">
+                                <table class="table table-striped" id="tablaVideoWalls">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center ordenarTabla" onclick="ordenar('Videowall','vi.NSVW','mostrarVideowallsOrdenat',0)">NSVW</th>
+                                            <th class="text-center ordenarTabla" onclick="ordenar('Videowall','vi.descripcio','mostrarVideowallsOrdenat',1)">Nom</th>
+                                            <th class="text-center ordenarTabla" onclick="ordenar('Videowall','contrac.descripcio','mostrarVideowallsOrdenat',2)">Contracte</th>
+                                            <th class="text-center ordenarTabla" onclick="ordenar('Videowall','cli.nomFiscal','mostrarVideowallsOrdenat',3)">Client</th>
+                                            <th class="text-center ordenarTabla" onclick="ordenar('Videowall','gru.descripcio','mostrarVideowallsOrdenat',4)">Grup</th>
+                                            <th class="text-center ordenarTabla" onclick="ordenar('Videowall','tf.descripcio','mostrarVideowallsOrdenat',5)">Format</th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                        </tr>
 
-                </thead>
-                <?php
-                $count = "SELECT COUNT(*) as 'cont' FROM Videowall";
-                $comprobar = mysqli_query($conn, $count);
-                $totalRows = mysqli_fetch_assoc($comprobar);
-                if ($totalRows['cont'] != 0) {
-                ?>
-                    <tbody id="mostrarVideowallsOrdenat">
-                        <?php
-                        $sql = "SELECT vi.NSVW as 'NSVW', vi.descripcio as 'nom', contrac.descripcio as 'contracte', cli.nomFiscal as 'client',gru.descripcio as 'grup',
+                                    </thead>
+                                    <?php
+                                    $count = "SELECT COUNT(*) as 'cont' FROM Videowall";
+                                    $comprobar = mysqli_query($conn, $count);
+                                    $totalRows = mysqli_fetch_assoc($comprobar);
+                                    if ($totalRows['cont'] != 0) {
+                                    ?>
+                                        <tbody id="mostrarVideowallsOrdenat">
+                                            <?php
+                                            $sql = "SELECT vi.NSVW as 'NSVW', vi.descripcio as 'nom', contrac.descripcio as 'contracte', cli.nomFiscal as 'client',gru.descripcio as 'grup',
                         tf.descripcio as 'format' FROM Videowall vi LEFT JOIN Contractes contrac ON vi.idContracte = contrac.id LEFT JOIN Clients cli ON vi.idClient = cli.id
                         LEFT JOIN Grups gru ON vi.idGrup = gru.id LEFT JOIN TipusFormat tf ON vi.idTipusFormat = tf.id";
-                        $execute = mysqli_query($conn, $sql);
-                        $i = 0;
-                        while ($row = mysqli_fetch_array($execute)) {
-                        ?>
-                            <tr>
-                                <td class="text-center"><?php echo $row['NSVW']; ?></td>
-                                <td class="text-center"><?php echo $row['nom']; ?></td>
-                                <td class="text-center"><?php echo $row['contracte']; ?></td>
-                                <td class="text-center"><?php echo $row['client']; ?></td>
-                                <td class="text-center"><?php echo $row['grup']; ?></td>
-                                <td class="text-center"><?php echo $row['format']; ?></td>
-                                <td class="text-center"><img class="logoTabla" src="./img/logo_update.png" onclick="actualizar('<?php echo $row['NSVW']; ?>','Videowall')"></td>
-                                <td class="text-center"><img class="logoTabla" src="./img/logo_delete.png" onclick="deleteRow('<?php echo $row['NSVW']; ?>','Videowall','NSVW')"></td>
-                            </tr>
-                        <?php
-                            $i++;
-                        }
-                        ?>
-                    </tbody>
+                                            $execute = mysqli_query($conn, $sql);
+                                            $i = 0;
+                                            while ($row = mysqli_fetch_array($execute)) {
+                                            ?>
+                                                <tr>
+                                                    <td class="text-center"><?php echo $row['NSVW']; ?></td>
+                                                    <td class="text-center"><?php echo $row['nom']; ?></td>
+                                                    <td class="text-center"><?php echo $row['contracte']; ?></td>
+                                                    <td class="text-center"><?php echo $row['client']; ?></td>
+                                                    <td class="text-center"><?php echo $row['grup']; ?></td>
+                                                    <td class="text-center"><?php echo $row['format']; ?></td>
+                                                    <td class="text-center"><img class="logoTabla" src="./img/logo_update.png" onclick="actualizar('<?php echo $row['NSVW']; ?>','Videowall')"></td>
+                                                    <td class="text-center"><img class="logoTabla" src="./img/logo_delete.png" onclick="deleteRow('<?php echo $row['NSVW']; ?>','Videowall','NSVW','videowall')"></td>
+                                                </tr>
+                                            <?php
+                                                $i++;
+                                            }
+                                            ?>
+                                        </tbody>
 
-                <?php
-                }
-                ?>
-            </table>
+                                    <?php
+                                    }
+                                    ?>
+                                </table>
         </div>
     <?php
     } elseif ($_POST['taulaMostrar'] == 'dispositius') {
@@ -299,7 +309,7 @@ if (isset($_POST['taulaMostrar'])) {
                                         <img class="logoTabla vhcenter" src="./img/logo_eye.png" />
                                     </button></td>
                                 <td class="text-center"><img class="logoTabla vhcenter" src="./img/logo_update.png" onclick="actualizar('<?php echo $row['id']; ?>','Dispositiu')" /></td>
-                                <td class="text-center"><img class="logoTabla" src="./img/logo_delete.png" onclick="deleteRow('<?php echo $row['id']; ?>','Dispositiu','id')"></td>
+                                <td class="text-center"><img class="logoTabla" src="./img/logo_delete.png" onclick="deleteRow('<?php echo $row['id']; ?>','Dispositiu','id','dispositius')"></td>
                             </tr>
                         <?php
                             $i++;
@@ -398,9 +408,29 @@ if (isset($_POST['taulaMostrar'])) {
                             <tr>
                                 <td class="text-center"><?php echo $row['id']; ?></td>
                                 <td class="text-center"><?php echo $row['descripcio']; ?></td>
-                                <td class="text-center"><img class="logoTabla" src="./img/logo_update.png" /></button></td>
-                                <td class="text-center"><img class="logoTabla" src="./img/logo_delete.png" onclick="deleteRow('<?php echo $row['id']; ?>','Marcas','id')"></td>
+                                <td class="text-center"><button style="background: transparent; border:none;" data-toggle="modal" data-target="#updateModal<?php echo $row['id']; ?>"><img class="logoTabla" src="./img/logo_update.png" /></button></td>
+                                <td class="text-center"><img class="logoTabla" src="./img/logo_delete.png" onclick="deleteRow('<?php echo $row['id']; ?>','Marcas','id','marcas')"></td>
                             </tr>
+                            <div class="modal fade" id="updateModal<?php echo $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="updateModalLabel">Modificar Marcas</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="inputUpdateModal<?php echo $row['id']; ?>">Nom: </label>
+                                                <input type="text" class="form-control" id="inputUpdateModal<?php echo $row['id']; ?>" value="<?php echo $row['descripcio']; ?>">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="actualizarMarcas('<?php echo $row['id']; ?>')">Actualizar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         <?php
                         }
                         ?>
@@ -438,9 +468,29 @@ if (isset($_POST['taulaMostrar'])) {
                             <tr>
                                 <td class="text-center"><?php echo $row['id']; ?></td>
                                 <td class="text-center"><?php echo $row['descripcio']; ?></td>
-                                <td class="text-center"><img class="logoTabla" src="./img/logo_update.png" /></button></td>
-                                <td class="text-center"><img class="logoTabla" src="./img/logo_delete.png" onclick="deleteRow('<?php echo $row['id']; ?>','TipusFormat','id')"></td>
+                                <td class="text-center"><button style="background: transparent; border:none;" data-toggle="modal" data-target="#updatetFormat<?php echo $row['id']; ?>"><img class="logoTabla" src="./img/logo_update.png" /></button></td>
+                                <td class="text-center"><img class="logoTabla" src="./img/logo_delete.png" onclick="deleteRow('<?php echo $row['id']; ?>','TipusFormat','id','tFormat')"></td>
                             </tr>
+                            <div class="modal fade" id="updatetFormat<?php echo $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="updatetFormatLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="updatetFormatLabel">Modificar Marcas</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="inputUpdatetFormat<?php echo $row['id']; ?>">Nom: </label>
+                                                <input type="text" class="form-control" id="inputUpdatetFormat<?php echo $row['id']; ?>" value="<?php echo $row['descripcio']; ?>">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="actualizartFormat('<?php echo $row['id']; ?>')">Actualizar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         <?php
                         }
                         ?>
@@ -478,9 +528,29 @@ if (isset($_POST['taulaMostrar'])) {
                             <tr>
                                 <td class="text-center"><?php echo $row['id']; ?></td>
                                 <td class="text-center"><?php echo $row['descripcio']; ?></td>
-                                <td class="text-center"><img class="logoTabla" src="./img/logo_update.png" /></button></td>
-                                <td class="text-center"><img class="logoTabla" src="./img/logo_delete.png" onclick="deleteRow('<?php echo $row['id']; ?>','Grups','id')"></td>
+                                <td class="text-center"><button style="background: transparent; border:none;" data-toggle="modal" data-target="#updategrups<?php echo $row['id']; ?>"><img class="logoTabla" src="./img/logo_update.png" /></button></td>
+                                <td class="text-center"><img class="logoTabla" src="./img/logo_delete.png" onclick="deleteRow('<?php echo $row['id']; ?>','Grups','id','grups')"></td>
                             </tr>
+                            <div class="modal fade" id="updategrups<?php echo $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="updategrupsLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="updategrupsLabel">Modificar Marcas</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="inputUpdategrups<?php echo $row['id']; ?>">Nom: </label>
+                                                <input type="text" class="form-control" id="inputUpdategrups<?php echo $row['id']; ?>" value="<?php echo $row['descripcio']; ?>">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="actualizargrup('<?php echo $row['id']; ?>')">Actualizar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         <?php
                         }
                         ?>

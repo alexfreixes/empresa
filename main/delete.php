@@ -24,12 +24,6 @@ if (isset($_POST['borrar'])) {
         unset($_SESSION['ContingutLlistes']);
     }
 }
-if (isset($_POST['idDelete'])) {
-    $delete = "DELETE FROM " . $_POST['tabla'] . " WHERE " . $_POST['campo'] . " LIKE '" . $_POST['idDelete'] . "'";
-    $execute = mysqli_query($conn, $delete);
-} else {
-    header("Location: ../index.php");
-}
 if (isset($_POST['quitar'])) {
     if (isset($_SESSION['listaProgramacio'])) {
         if ($_SESSION['listaProgramacio'] == $_POST['quitar']) {
@@ -50,4 +44,10 @@ if (isset($_POST['quitar'])) {
             }
         }
     }
+}
+if (isset($_POST['idDelete'])) {
+    $delete = "DELETE FROM " . $_POST['tabla'] . " WHERE " . $_POST['campo'] . " LIKE '" . $_POST['idDelete'] . "'";
+    $execute = mysqli_query($conn, $delete);
+} else {
+    header("Location: ../index.php");
 }

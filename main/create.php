@@ -34,7 +34,7 @@ if (isset($_POST['insertarProgramacio'])) {
     $sql = "INSERT INTO `VideowallProgramacio`(`NSVW`, `idProgramacio`, `activa`) VALUES ('" . $_POST['insertarVideowall'] . "','" . $row['id'] . "','1')";
     $execute = mysqli_query($conn, $sql);
 
-    $sql = "INSERT INTO `LlistesProgramacions`(`idProgramacio`, `idLlistes`, `dataInici`, `dataFinal`, `inconvenients`) VALUES ('" . $row['id'] . "','" . $_SESSION['listaProgramacio'] . "','" . $_POST['insertarDataInici'] . "','" . $_POST['insertarDataFinal'] . "','" . $_POST['insertarInconvenients'] . "')";
+    $sql = "INSERT INTO `LlistesProgramacions`(`idProgramacio`, `idLlistes`, `dataInici`, `dataFinal`, `inconvenients`, `activa`) VALUES ('" . $row['id'] . "','" . $_SESSION['listaProgramacio'] . "','" . $_POST['insertarDataInici'] . "','" . $_POST['insertarDataFinal'] . "','" . $_POST['insertarInconvenients'] . "','1')";
     $execute = mysqli_query($conn, $sql);
     if (isset($_SESSION['listaProgramacio'])) {
         unset($_SESSION['listaProgramacio']);

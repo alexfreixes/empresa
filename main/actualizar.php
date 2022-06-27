@@ -566,6 +566,24 @@ if (isset($_POST['actualitzar'])) {
             </div>
         </div>
 <?php
+    } else if ($_POST['actualitzar'] == 'marcas') {
+        $desc = $_POST['value'];
+        $id = $_POST['id'];
+
+        $sql = "UPDATE `marcas` SET `descripcio`='$desc' WHERE `id` = $id";
+        $execute = mysqli_query($conn, $sql);
+    } else if ($_POST['actualitzar'] == 'tFormat') {
+        $desc = $_POST['value'];
+        $id = $_POST['id'];
+
+        $sql = "UPDATE `tipusformat` SET `descripcio`='$desc' WHERE `id` = $id";
+        $execute = mysqli_query($conn, $sql);
+    } else if ($_POST['actualitzar'] == 'grups') {
+        $desc = $_POST['value'];
+        $id = $_POST['id'];
+
+        $sql = "UPDATE `grups` SET `descripcio`='$desc' WHERE `id` = $id";
+        $execute = mysqli_query($conn, $sql);
     }
 }
 ?>
